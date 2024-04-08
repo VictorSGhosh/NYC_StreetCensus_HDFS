@@ -2,94 +2,64 @@
 
 1. Install [JAVA JDK 8](https://www.oracle.com/java/technologies/downloads/)
 2. Update environment variables and make sure JAVA_HOME & its path on C: drive is present on the list of enironment variables
-3. Download HDFS from HDFS distribution
+3. Download HDFS from [HDFS distribution](https://hadoop.apache.org/releases.html). We have downloaded Hadoop v3.4.0 for our use.
 4. Unzip HDFS-distribution in C: drive  
-   ``` bash
-    JAVA_HOME="/Library/Java/JavaVirtualMachines/jdk-1.8.jdk/Contents/Home"
-
-    # Hadoop 
-    export HADOOP_HOME=/Users/revanth/hadoop-3.4.0/
-    export HADOOP_INSTALL=$HADOOP_HOME 
-    export HADOOP_MAPRED_HOME=$HADOOP_HOME 
-    export HADOOP_COMMON_HOME=$HADOOP_HOME 
-    export HADOOP_HDFS_HOME=$HADOOP_HOME
-    export YARN_HOME=$HADOOP_HOME 
-    export HADOOP_COMMON_LIB_NATIVE_DIR=$HADOOP_HOME/lib/native 
-    export PATH=$PATH:$HADOOP_HOME/sbin:$HADOOP_HOME/bin 
-    export HADOOP_OPTS="-Djava.library.path=$HADOOP_HOME/lib/nativ"
-   ```
-3. Update ```JAVA_HOME``` path in ```hadoop-env.sh```
-4. Update the following configuration files:
+5. Go to C:\hadoop-3.4.0\etc\hadoop folder and make the following edits.
    ### core-site.xml
    ``` xml
    <configuration>
-    <property>
-        <name>hadoop.tmp.dir</name>
-        <value>/Users/revanth/hdfs/tmp/</value>
-    </property>
-    <property>
-        <name>fs.default.name</name>
-        <value>hdfs://127.0.0.1:9000</value>
-    </property>
+      <property>
+        <name>fs.defaultFS</name>
+        <value>hdfs://localhost:900</value>
+      </property>
    </configuration>
    ```
 
    ### hdfs-site.xml
    ``` xml
    <configuration>
-    <property>
-        <name>dfs.name.dir</name>
-        <value>/Users/revanth/hdfs/namenode</value>
-    </property>
-    <property>
-        <name>dfs.data.dir</name>
-        <value>/Users/revanth/hdfs/datanode</value>
-    </property>
-    <property>
-        <name>dfs.replication</name>
-        <value>1</value>
-    </property>
+       <property>
+           <name>dfs.replication</name>
+           <value>1</value>
+       </property>
+       
+       <property>
+           <name>dfs.namenode.name.dir</name>
+           <value>C:\hadoop-3.4.0\data\namenode</value>
+       </property>
+       
+       <property>
+           <name>dfs.datanode.name.dir</name>
+           <value>C:\hadoop-3.4.0\data\datanode</value>
+       </property>
    </configuration>
    ```
 
    ### mapred-site.xml
    ``` xml
    <configuration>
-      <property> 
-        <name>mapreduce.framework.name</name> 
-        <value>yarn</value> 
-      </property> 
+       <property>
+           <name>mapreduce.framework.name</name>
+           <value>yarn</value>
+       </property>
    </configuration>
    ```
 
    ### yarn-site.xml
    ``` xml
    <configuration>
-      <property>
-        <name>yarn.nodemanager.aux-services</name>
-        <value>mapreduce_shuffle</value>
-      </property>
-      <property>
-        <name>yarn.nodemanager.aux-services.mapreduce.shuffle.class</name>
-        <value>org.apache.hadoop.mapred.ShuffleHandler</value>
-      </property>
-      <property>
-        <name>yarn.resourcemanager.hostname</name>
-        <value>127.0.0.1</value>
-      </property>
-      <property>
-        <name>yarn.acl.enable</name>
-        <value>0</value>
-      </property>
-      <property>
-        <name>yarn.nodemanager.env-whitelist</name>   
-        <value>JAVA_HOME,HADOOP_COMMON_HOME,HADOOP_HDFS_HOME,HADOOP_CONF_DIR,CLASSPATH_PERPEND_DISTCACHE,HADOOP_YARN_HOME,HADOOP_MAPRED_HOME</value>
-      </property>
+       <property>
+           <name>yarn.nodemanager.aux-services</name>
+           <value>mapreduce_shuffle</value>
+       </property>
+       <property>
+           <name>yarn.nodemanager.auxservices.mapreduce.shuffle</name>
+           <value>org.apache.hadoop.mapred.shufflehandler</value>
+       </property>
    </configuration>
    ```
-5. Format the HDFS namenode: ```hdfs namenode -format```
-6. Start hadoop: ```start-all.sh```
-7. Access hadoop browser-interface at: [http://localhost:9870/dfshealth.html#tab-overview](http://localhost:9870/dfshealth.html#tab-overview)
-8. Stop hadoop: ```stop-all.sh```
+6. Create HDFS namenode and datanode folders under C:\hadoop-3.4.0\data: `
+7. Start hadoop: ```start-all.cmd```
+
 
 
