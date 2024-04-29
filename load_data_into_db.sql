@@ -1,5 +1,7 @@
-CREATE DATABASE IF NOT EXISTS ECE_569_;
-USE ECE_569_;
+DROP DATABASE IF EXISTS ECE_569_;
+DROP DATABASE IF EXISTS ECE_569;
+CREATE DATABASE IF NOT EXISTS ECE_569;
+USE ECE_569;
 
 DROP TABLE IF EXISTS NY_Trees_Data;
 CREATE TABLE NY_Trees_Data (
@@ -10,7 +12,7 @@ CREATE TABLE NY_Trees_Data (
     tree_dbh      INT,
     stump_diam    INT,
     curb_loc      ENUM('OnCurb', 'OffsetFromCurb'),
-    status        ENUM('Alive', 'Dead', 'Stump', 'Other'),
+    status        ENUM('Alive', 'Dead', 'Stump'),
     health        ENUM('Good', 'Fair', 'Poor', ''),
     spc_latin     VARCHAR(255),
     spc_common    VARCHAR(255),
@@ -27,27 +29,27 @@ CREATE TABLE NY_Trees_Data (
     trnk_other    ENUM('No', 'Yes'),
     brnch_ligh    ENUM('No', 'Yes'),
     brnch_shoe    ENUM('No', 'Yes'),
-    brnch_othe    ENUM('No', 'Yes'), 
+    brnch_othe    ENUM('No', 'Yes'),
     address       VARCHAR(255),
     zipcode       INT,
     zip_city      VARCHAR(255),
     cb_num        INT,
     borocode      INT,
-    boroname      VARCHAR(255),
+    boroname      ENUM('Queens', 'Brooklyn', 'Staten Island', 'Manhattan', 'Bronx'),
     cncldist      INT,
     st_assem      INT,
     st_senate     INT,
     nta           VARCHAR(10),
     nta_name      VARCHAR(255),
     boro_ct       INT,
-    state         ENUM('New York', 'Other'),
+    state         ENUM('New York'),
     Latitude      DECIMAL(10, 8),
     Longitude     DECIMAL(11, 8),
     x_sp          DECIMAL(18, 8),
     y_sp          DECIMAL(18, 8)
 );
-
-LOAD DATA LOCAL INFILE 'C:\ProgramData\MySQL\MySQL Server 8.3\Uploads\2015StreetTreesCensus.csv'
+SET GLOBAL local_infile = true;
+LOAD DATA LOCAL INFILE 'C:\\ProgramData\\MySQL\\MySQL Server 8.3\\Uploads\\2015StreetTreesCensus.csv'
 INTO TABLE NY_Trees_Data
 FIELDS TERMINATED BY ',' ENCLOSED BY '"'
 LINES TERMINATED BY '\n'
