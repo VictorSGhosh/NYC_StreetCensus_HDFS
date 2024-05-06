@@ -1,4 +1,4 @@
-import datetime
+from datetime import datetime
 
 from pyspark.sql import SparkSession
 
@@ -11,16 +11,20 @@ spark = SparkSession.builder \
 df = spark.read.csv('hdfs://localhost:9000/sample-data.csv', header=True, inferSchema=True)
 
 # # Perform SQL-like queries
-df.createOrReplaceTempView('trees')
-start = datetime.datetime.now()
+df.createOrReplaceTempView('NY_Trees_Data')
 
-# result = spark.sql("SELECT boroname, COUNT(*) as count FROM trees WHERE spc_common LIKE '%maple%' GROUP BY boroname")
-result = spark.sql("SELECT st_assem, COUNT(*) as count FROM trees GROUP BY st_assem")
-result.show(1000, False)
-end = datetime.datetime.now()
+
+start = datetime.now()
+# sql_query = "SELECT boroname, COUNT(*) as count FROM trees WHERE spc_common LIKE '%maple%' GROUP BY boroname"
+
+# Read SQL query from a file
+with open('Complex Select.sql', 'r') as file:
+    sql_query = file.read()
+
+result = spark.sql(sql_query)
+result.show(result.count(), False)
+end = datetime.now()
 print('Execution time: ' + str(end - start))
-# result = spark.sql("SELECT COUNT(*) as count FROM trees;")
-# result.show()
 
 # Stop the Spark session
 spark.stop()
